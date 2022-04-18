@@ -1,0 +1,37 @@
+import numpy as np 
+import math
+
+obs=np.array([5.1,3.2])#observations to be classified
+
+A=np.array([[1,2],[2,3],[3,3],[4,5],[5,5]])
+print('A Matrix is:\n {}'.format(A))
+A=A.mean(axis=0)
+print('Mean of A:\n {}'.format(A))
+
+
+B=np.array([[4,2],[5,0],[5,2],[3,2],[5,3],[6,3]])
+print('B Matrix is:\n {}'.format(B))
+B=B.mean(axis=0)
+print('Mean of B:\n {}'.format(B))
+
+
+FM=np.array([[1,2],[2,3],[3,3],[4,5],[5,5],[4,2],[5,0],[5,2],[3,2],[5,3],[6,3]])
+print('The Full Matrix is :\n {}'.format(FM))
+print('Mean of Full Matrix:\n {}'.format(np.mean(FM,axis=0)))
+FM = (FM - np.mean(FM, axis=0))
+print('The Scaled Matrix is :\n {}'.format(FM))
+
+
+PoolCov=np.dot(np.transpose(FM),FM)/11
+print('The Variance Covariance Matrix is :\n {}'.format(np.round(PoolCov,2)))
+
+pcinv=np.linalg.inv(PoolCov)
+print('The inverse of Pooled Covariance Matrix is :\n {}'.format(pcinv))
+
+mu1=np.transpose(A)
+mu2=np.transpose(B)
+
+f1=np.dot(np.dot(mu1,pcinv),np.transpose(obs))-(0.5*(np.dot(np.dot(mu1,pcinv),np.transpose(mu1))))+(math.log(5/11))
+f2=np.dot(np.dot(mu2,pcinv),np.transpose(obs))-(0.5*(np.dot(np.dot(mu2,pcinv),np.transpose(mu2))))+(math.log(6/11))
+print('\n\nf1 ={}'.format(np.round(f1,2)))
+print('f2 ={}'.format(np.round(f2,2)))
