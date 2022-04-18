@@ -1,0 +1,23 @@
+import numpy as np
+from scipy.cluster.hierarchy import dendrogram, linkage
+from matplotlib import pyplot as plt
+
+X = np.array([[5,4,7],
+    [3,6,1],
+    [6,4,8],
+    [2,4,4],
+    [1,1,3],])
+    
+
+linked = linkage(X, 'kmeans')
+print(linked)
+
+labelList = range('A', 'F')
+
+plt.figure(figsize=(10, 7))
+dendrogram(linked,
+            orientation='top',
+            labels=labelList,
+            distance_sort='ascending',
+            show_leaf_counts=True)
+plt.show()
