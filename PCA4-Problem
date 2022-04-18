@@ -1,0 +1,57 @@
+import numpy as np 
+import numpy.linalg as linalg
+import math
+
+X=np.array([[16,16,13,18,16,15,14,16,16],
+            [18,19,15,16,18,18,18,17,19],
+            [17,17,14,14,17,17,20,14,15],
+            [17,17,17,16,18,18,16,20,14],
+            [16,15,17,17,18,18,19,16,19],
+            [15,17,16,17,18,18,15,19,16],
+            [17,16,16,18,18,18,17,15,18],
+            [20,18,16,20,15,15,19,14,17],
+            [14,16,18,17,19,19,18,17,18],
+            [16,16,15,19,18,18,18,15,14],
+            [18,19,16,14,14,14,17,16,13],
+            [19,15,15,18,16,16,18,19,17]])
+print('\nGven Matrix is :\n{}'.format(X))
+print('\nMean Values {}'.format(np.mean(X,axis=0)))
+
+
+A = (X - np.mean(X, axis=0))
+print('\nStandardized Matrix is :\n {}'.format(A))
+
+VarCov=np.dot(np.transpose(A),A)/len(X)
+print('\nVariance Covariance Matrix is {}'.format(VarCov))
+
+
+eigenValues, eigenVectors = linalg.eig(VarCov)
+
+idx = eigenValues.argsort()[::-1]   
+eigenValues = eigenValues[idx]
+eigenVectors = eigenVectors[:,idx]
+
+print('\nEigen Values are {}'.format(eigenValues))
+print('\nEigen Vectors are {}'.format(eigenVectors))
+
+
+s=sum(list(eigenValues))
+t=[]
+stoppoint=0
+for i in range(np.size(eigenValues)):
+    l=list(eigenValues)
+    numerator=sum(l[0:i+1])
+    z=(numerator/s)*100
+    if z<=95:
+        stoppoint=i+1
+    t.append(z)
+print('\nThreshold Table :\n{}'.format(t))
+
+
+eigenValues=eigenValues.tolist()
+eigenValues=eigenValues[0:stoppoint]
+eigenVectors=eigenVectors[:,0:stoppoint]
+
+print('\nRetained Eigen Values :\n{}'.format(eigenValues))
+print('\nRetained Eigen Vectors: \n{}'.format(eigenVectors))
+print('\n PCA Matrix :\n{}'.format(np.dot(X,eigenVectors)))
